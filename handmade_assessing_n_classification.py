@@ -1,68 +1,65 @@
 import numpy as np
+import math
+
 
 comp_val = lambda a, b: 1 if a == b else 0
 
 
-def euclidean_distance(u, x):
-    dist = 0
-
-    for i in range(len(x)):
-        dist += (u[i] - x[i]) ** 2
-
-    dist = dist ** 0.5
-
-    return dist
-
-# def get_omega(j, X):
-#     omega = np.zeros(len(X))
-#     distance = {}
-#
-#     for i in range(len(X)):
-#         distance[euclidean_distance(X[j], X[i])] = i
-#
-#     distance = sorted(distance)
-#
-#     k = 1
-#     for key in distance:
-#         omega[distance[key]] = comp_val(k, 3)
-#
-#     return omega
+def sum_of_squares(v):
+    """ v1 * v1 + v2 * v2 ... + vn * vn"""
+    # or return dot_product(v, v)
+    return sum(vi ** 2 for vi in v)
 
 
-# def get_gamma(X, Y, l):
-#     gamma = 0
-#     m_gamma = 0
-#
-#     y_u = Y[j]
-#
-#     for i in range(len(Y)):
-#         is_equal = comp_val(y_u, Y[i])
-#
-#         omega = get_omega(i, X)
-#         gamma = gamma + is_equal*omega
-#
-#         if i != l:
-#             m_gamma = m_gamma + is_equal*omega
-#
-#     return gamma - m_gamma
+def subtract_vectors(v, w):
+    return [vi - wi for vi, wi in zip(v, w)]
+
+
+def magnitude(v):
+    return math.sqrt(sum_of_squares(v))
+
+
+def distance(a, b):
+    return magnitude(subtract_vectors(a, b))
+
+
+def calc_with_kernel(radius):
+    return math.sin(radius * math.pi / 2)
+
+
+def get_duplicates(X):
+    i_duplicates = []
+
+    for i in range(len(X), 1, -1):
+        for j in range(i + 1, len(X)):
+            if distance(X[i], X[j]) == 0:
+                i_duplicates.append(i)
+
+    return i_duplicates
 
 
 def get_distances(X):
-    D = []
-    for i in range(1, len(X)):
-        row = []
-        for j in range(i - 1):
-            dist = euclidean_distance(X[i], X[j])
-            row.append(dist)
-        D.append(row)
+    size = len(X)
+    D = [[0 for col in range(size)] for row in range(size)]
+
+    for i in range(size):
+        for j in range(i):
+            D[i][j] = distance(X[i], X[j])
+            D[j][i] = D[i][j]
 
     return D
+
+
+def ranging(D_i):
+    indexed_distances = [[D_i[i], i] for i in range(len(D_i))]
+    return indexed_distances.sort()
+
 
 def main():
     u = [[1, 2], [3, 4]]
     x = [3, 3]
 
-    print(u[0][0])
+    print(calc_with_kernel(0.1))
 
 
 if __name__ == '__main__':

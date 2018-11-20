@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pylab as pl
 from sklearn import neighbors, datasets
-# import handmade_assessing_n_classification as anc
+import handmade_assessing_n_classification as anc
 
 # Импортируем данные. Спасибо sklearn, в нём есть модуль datasets, содержащий известные базы данных.
 iris = datasets.load_iris()
@@ -11,10 +11,17 @@ X = iris.data[:, :2]
 # Т.к. взяли все входные примеры, берем все выходные значения - класс ириса.
 Y = iris.target
 
-print(X)
 
-# M = anc.get_margin(X, Y)
-# print(X)
+
+di = anc.get_distances(X)
+
+anc.ranging(di[0])
+
+# print(len(di))
+#
+# for i in range(len(di)):
+#     print(di[i])
+
 
 # шаг сетки
 h = .02
