@@ -29,35 +29,40 @@ def euclidean_distance(u, x):
 #     return omega
 
 
-def get_gamma(X, Y, l):
-    gamma = 0
-    m_gamma = 0
+# def get_gamma(X, Y, l):
+#     gamma = 0
+#     m_gamma = 0
+#
+#     y_u = Y[j]
+#
+#     for i in range(len(Y)):
+#         is_equal = comp_val(y_u, Y[i])
+#
+#         omega = get_omega(i, X)
+#         gamma = gamma + is_equal*omega
+#
+#         if i != l:
+#             m_gamma = m_gamma + is_equal*omega
+#
+#     return gamma - m_gamma
 
-    y_u = Y[j]
 
-    for i in range(len(Y)):
-        is_equal = comp_val(y_u, Y[i])
+def get_distances(X):
+    D = []
+    for i in range(1, len(X)):
+        row = []
+        for j in range(i - 1):
+            dist = euclidean_distance(X[i], X[j])
+            row.append(dist)
+        D.append(row)
 
-        omega = get_omega(i, X)
-        gamma = gamma + is_equal*omega
-
-        if i != l:
-            m_gamma = m_gamma + is_equal*omega
-
-    return gamma - m_gamma
-
-
-def get_margin(X, Y):
-    M = []
-    for i in range(len(X)):
-        M.append(get_gamma(X, Y, i))
-
-    return M
+    return D
 
 def main():
-    u = [3, 0]
+    u = [[1, 2], [3, 4]]
     x = [3, 3]
-    print(euclidean_distance(u, x))
+
+    print(u[0][0])
 
 
 if __name__ == '__main__':
