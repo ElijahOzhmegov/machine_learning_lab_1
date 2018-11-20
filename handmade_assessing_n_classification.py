@@ -24,7 +24,10 @@ def distance(a, b):
 
 
 def calc_with_kernel(radius):
-    return math.sin(radius * math.pi / 2)
+    if radius > 1:
+        return 0
+    return 1 - math.sin(radius * math.pi / 2)
+
 
 
 def get_duplicates(X):
@@ -52,14 +55,38 @@ def get_distances(X):
 
 def ranging(D_i):
     indexed_distances = [[D_i[i], i] for i in range(len(D_i))]
-    return indexed_distances.sort()
+    indexed_distances.sort()
+    return indexed_distances
+
+
+# it allows you to get k omega for desired Xi
+def get_k_omega(Di, r_Di, k):
+    omega = []
+
+    limit_rho = r_Di[k+1][0]
+    
+    for i in range(k):
+        rho_i = r_Di[i][0]
+        tmp_omega = calc_with_kernel(rho_i / limit_rho)
+        omega.append(tmp_omega)  # suffer, bitch!
+
+    return omega
+
+
+def get_Gamma(Y, y_u, Di, r_Di, k):
+    gamma = 0
+    omega = get_k_omega(Di, r_Di, k)
+
+    for i in range(k):
+        index = r_Di[i][1]
+        gamma += comp_val(Y(index), y_u)*omega[i]
 
 
 def main():
     u = [[1, 2], [3, 4]]
     x = [3, 3]
 
-    print(calc_with_kernel(0.1))
+    print(calc_with_kernel(1.5))
 
 
 if __name__ == '__main__':

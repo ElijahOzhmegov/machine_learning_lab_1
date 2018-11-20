@@ -15,8 +15,11 @@ Y = iris.target
 
 di = anc.get_distances(X)
 
-anc.ranging(di[0])
+ranged_di = anc.ranging(di[0])
 
+gamma = anc.get_Gamma(Y, Y[0], di, ranged_di, 5)
+
+print(gamma)
 # print(len(di))
 #
 # for i in range(len(di)):
