@@ -2,7 +2,8 @@
 import numpy as np
 import matplotlib.pylab as pl
 from sklearn import neighbors, datasets
-import handmade_assessing_n_classification as anc
+import calculate_accuracy as ca
+# import handmade_assessing_n_classification as anc
 
 # Импортируем данные. Спасибо sklearn, в нём есть модуль datasets, содержащий известные базы данных.
 iris = datasets.load_iris()
@@ -13,25 +14,25 @@ Y = iris.target
 
 
 
-di = anc.get_distances(X)
+# di = anc.get_distances(X)
+#
+# ranged_di = anc.ranging(di[0])
+#
+# omega = anc.get_all_omega(di, ranged_di, 5)
 
-ranged_di = anc.ranging(di[0])
-
-gamma = anc.get_Gamma(Y, Y[0], di, ranged_di, 5)
-
-print(gamma)
+# print(omega)
 # print(len(di))
 #
 # for i in range(len(di)):
 #     print(di[i])
-
+new_X, new_Y = ca.getting_rid_of_duplicates(X, Y)
 
 # шаг сетки
 h = .02
 
 # И снова спасибо sklearn: создаем экземпляр классификатора kNN
 # Мы берем все параметры по умолчанию, а вообще их можно задать
-knn = neighbors.KNeighborsClassifier(n_neighbors=5)
+knn = neighbors.KNeighborsClassifier(n_neighbors=15, weights='distance')
 
 # "Обучаем" классификатор на наших данных
 knn.fit(X, Y)
@@ -43,7 +44,7 @@ knn.fit(X, Y)
 
 # Построим диаграмму, иллюстрирующую полученные классы.
 # Для этого присвоим каждой ячейке сетки [x1_min, x1_max]x[x2_min, x2_max]
-# цвет класca, которому она принадлежит.
+# цвет классa, которому она принадлежит.
 
 # Находим x1_min, x1_max, x2_min, x2_max - это минимальные и максимальные значения 
 # двух признаков, содержащихся в X. Слагаемое 0.5 - для отступа на диаграмме.

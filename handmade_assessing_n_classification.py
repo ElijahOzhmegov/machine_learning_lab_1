@@ -29,7 +29,6 @@ def calc_with_kernel(radius):
     return 1 - math.sin(radius * math.pi / 2)
 
 
-
 def get_duplicates(X):
     i_duplicates = []
 
@@ -73,6 +72,17 @@ def get_k_omega(Di, r_Di, k):
     return omega
 
 
+def get_all_omega(Di, r_Di, k):
+    full_omega = [0 for j in range(len(Di))]
+    omega = get_k_omega(Di, r_Di, k)
+
+    for i in range(k):
+        index = r_Di[i][1]
+        full_omega[index] = omega[i]
+
+    return full_omega
+
+
 def get_Gamma(Y, y_u, Di, r_Di, k):
     gamma = 0
     omega = get_k_omega(Di, r_Di, k)
@@ -80,6 +90,17 @@ def get_Gamma(Y, y_u, Di, r_Di, k):
     for i in range(k):
         index = r_Di[i][1]
         gamma += comp_val(Y(index), y_u)*omega[i]
+
+
+def get_rid_of_zeros(x, y):
+    new_x = []
+    new_y = []
+
+    for i in range(len(x)):
+        if y[i] != 0:
+            new_y.append(y[i])
+            new_x.append(x[i])
+    return [new_x, new_y]
 
 
 def main():
