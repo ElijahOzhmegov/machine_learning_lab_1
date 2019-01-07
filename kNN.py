@@ -25,14 +25,17 @@ Y = iris.target
 #
 # for i in range(len(di)):
 #     print(di[i])
-new_X, new_Y = ca.getting_rid_of_duplicates(X, Y)
+# new_X, new_Y = ca.getting_rid_of_duplicates(X, Y)
+#
+# X = new_X
+# Y = new_Y
 
 # шаг сетки
 h = .02
 
 # И снова спасибо sklearn: создаем экземпляр классификатора kNN
 # Мы берем все параметры по умолчанию, а вообще их можно задать
-knn = neighbors.KNeighborsClassifier(n_neighbors=15, weights='distance')
+knn = neighbors.KNeighborsClassifier(n_neighbors=5, weights='distance')
 
 # "Обучаем" классификатор на наших данных
 knn.fit(X, Y)
@@ -54,6 +57,7 @@ x2_min, x2_max = X[:,1].min() - .5, X[:,1].max() + .5
 x1, x2 = np.meshgrid(np.arange(x1_min, x1_max, h), np.arange(x2_min, x2_max, h))
 # Скармливаем эти матрицы классификатору, на выходе получаем значение класca для каждой ячейки
 Z = knn.predict(np.c_[x1.ravel(), x2.ravel()])
+acc = ca.getting_accuracy(knn, np.c_[x1.ravel(), x2.ravel()], Z)
 # Приведем форму результата к матрице такого же размера, что и матрицы признаков
 Z = Z.reshape(x1.shape)
 

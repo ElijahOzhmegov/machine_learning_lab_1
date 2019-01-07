@@ -44,7 +44,20 @@ def getting_rid_of_duplicates(x, y):
             new_x.append(x[i])
             new_y.append(y[i])
 
-    return new_x, new_y
+    return np.asarray(new_x), np.asarray(new_y)
+
+
+def getting_accuracy(method, x_test, y_test):
+    accuracy = 0
+    n = len(y_test)
+
+    y_new = method.predict(x_test)
+
+    for i in range(n):
+        if y_new[i] != y_test[i]:
+            accuracy += 1.0
+
+    return 1 - accuracy/n
 
 
 if __name__ == '__main__':
