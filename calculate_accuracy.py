@@ -26,7 +26,7 @@ def distance(a, b):
     return magnitude(subtract_vectors(a, b))
 
 
-def getting_rid_of_duplicates(x, y):
+def get_rid_of_duplicates(x, y):
     new_x = []
     new_y = []
 
@@ -35,7 +35,7 @@ def getting_rid_of_duplicates(x, y):
     for i in range(len(x)):
 
         for j in range(i + 1, len(x)):
-            if distance(x[i], x[j]) == 0:
+            if distance(x[i], x[j]) == 0 and y[i] != y[j]:
                 bad_indexes.append(i)
                 bad_indexes.append(j)
                 break
@@ -47,7 +47,7 @@ def getting_rid_of_duplicates(x, y):
     return np.asarray(new_x), np.asarray(new_y)
 
 
-def getting_accuracy(method, x_test, y_test):
+def get_accuracy(method, x_test, y_test):
     accuracy = 0
     n = len(y_test)
 
@@ -64,6 +64,6 @@ if __name__ == '__main__':
     x = [[0, 0], [1, 1], [1, 2], [1, 1], [3, 1]]
     y = [j for j in range(len(x))]
 
-    new_x, new_y = getting_rid_of_duplicates(x, y)
+    new_x, new_y = get_rid_of_duplicates(x, y)
 
     print(new_x, '\n', new_y)
