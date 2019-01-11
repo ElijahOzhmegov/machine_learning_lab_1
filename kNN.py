@@ -17,33 +17,47 @@ Y = iris.target
 
 new_X, new_Y = ca.get_rid_of_duplicates(X, Y)
 
-X = new_X
-Y = new_Y
-
 # шаг сетки
 h = .02
 
 
 # a random split into training and test sets
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=15)
+X_train_a, X_test_a, Y_train_a, Y_test_a = train_test_split(X, Y, test_size=0.3, random_state=15)
+
+X = new_X
+Y = new_Y
+
+X_train_b, X_test_b, Y_train_b, Y_test_b = train_test_split(X, Y, test_size=0.3, random_state=15)
 
 file = open("results/result_table.tex", 'w')
 
 for k in range(3, 30, 2):
     # И снова спасибо sklearn: создаем экземпляр классификатора kNN
     # Мы берем все параметры по умолчанию, а вообще их можно задать
-    knn = neighbors.KNeighborsClassifier(n_neighbors=k, weights='distance')
+    knn1 = neighbors.KNeighborsClassifier(n_neighbors=k)
+    knn2 = neighbors.KNeighborsClassifier(n_neighbors=k, weights='distance')
+    knn3 = neighbors.KNeighborsClassifier(n_neighbors=k)
+    knn4 = neighbors.KNeighborsClassifier(n_neighbors=k, weights='distance')
 
     # "Обучаем" классификатор на наших данных
-    knn.fit(X_train, Y_train)
+    knn1.fit(X_train_a, Y_train_a)
+    knn2.fit(X_train_a, Y_train_a)
+    knn3.fit(X_train_b, Y_train_b)
+    knn4.fit(X_train_b, Y_train_b)
 
     # Рассчитаем точность классификации (раскомментируйте три следующие строки и впишите код для расчета точности)
-    acc = ca.get_accuracy(knn, X_test, Y_test)
+    acc1 = ca.get_accuracy(knn1, X_test_a, Y_test_a)
+    acc2 = ca.get_accuracy(knn2, X_test_a, Y_test_a)
+    acc3 = ca.get_accuracy(knn3, X_test_b, Y_test_b)
+    acc4 = ca.get_accuracy(knn4, X_test_b, Y_test_b)
 
-    result = "Точность: {} %".format(np.round(acc*100, 3))
-    print(result)
+    # result = "Точность: {} %".format(np.round(acc1*100, 3))
+    # print(result)
 
-    file.write(str(k) + ' & ' + str(np.round(acc*100, 3)) + " \\\\" + ' ' + '\n')
+    file.write(str(k) + ' & ' + str(np.round(acc1 * 100, 3)) +
+                        ' & ' + str(np.round(acc2 * 100, 3)) +
+                        ' & ' + str(np.round(acc3 * 100, 3)) +
+                        ' & ' + str(np.round(acc4 * 100, 3)) + " \\\\" + ' ' + '\n')
 
 file.close()
 
@@ -58,7 +72,7 @@ x2_min, x2_max = X[:,1].min() - .5, X[:,1].max() + .5
 # Строим сетки, т.е. матрицы, содержащие значения признаков в диапазоне от min до max
 x1, x2 = np.meshgrid(np.arange(x1_min, x1_max, h), np.arange(x2_min, x2_max, h))
 # Скармливаем эти матрицы классификатору, на выходе получаем значение класca для каждой ячейки
-Z = knn.predict(np.c_[x1.ravel(), x2.ravel()])
+Z = knn4.predict(np.c_[x1.ravel(), x2.ravel()])
 
 # Приведем форму результата к матрице такого же размера, что и матрицы признаков
 Z = Z.reshape(x1.shape)
